@@ -10,7 +10,7 @@ type Status = "idle" | "sending" | "sent" | "error";
 const links = [
   { label: "email", value: profile.email, href: socials.email },
   { label: "linkedin", value: "muthu-bala-sudhan-m", href: socials.linkedin },
-  { label: "github", value: "@your-handle", href: socials.github }, // TODO
+  { label: "github", value: "@Muthubalasudhan7", href: socials.github },
 ];
 
 export default function Contact() {

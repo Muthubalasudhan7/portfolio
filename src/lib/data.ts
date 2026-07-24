@@ -30,7 +30,7 @@ export const profile = {
 export const socials = {
   email: `mailto:${profile.email}`,
   linkedin: "https://www.linkedin.com/in/muthu-bala-sudhan-m/",
-  github: "https://github.com/", // TODO: replace with your real GitHub profile URL
+  github: "https://github.com/Muthubalasudhan7",
   resume: "/resume.pdf", // TODO: drop your resume PDF into /public/resume.pdf
 } as const;
 
