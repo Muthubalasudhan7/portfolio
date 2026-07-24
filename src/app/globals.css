@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Terminal / IDE identity — "phosphor green".
+ * One accent (terminal green) + warm-neutral surfaces.
+ * Colors are stored as space-separated RGB channels so Tailwind's
+ * `rgb(var(--x) / <alpha-value>)` opacity syntax works.
+ */
+
+:root {
+  /* dark is the default terminal look */
+  --bg: 8 11 10; /* #080B0A near-black, faint green cast */
+  --surface: 14 21 18; /* #0E1512 panels */
+  --surface-2: 19 28 23; /* #131C17 raised panels */
+  --border: 28 42 34; /* #1C2A22 */
+  --fg: 200 211 206; /* #C8D3CE soft green-gray body text */
+  --fg-strong: 232 240 234; /* #E8F0EA headings */
+  --muted: 110 127 118; /* #6E7F76 */
+  --accent: 0 230 118; /* #00E676 phosphor green */
+  --accent-dim: 16 183 107; /* #10B76B */
+
+  /* syntax-highlight roles — used only inside code-like contexts */
+  --syn-str: 229 192 123; /* amber strings */
+  --syn-key: 97 175 239; /* blue keywords */
+  --syn-fn: 86 182 194; /* cyan functions */
+  --syn-num: 209 154 102; /* orange numbers */
+  --syn-comment: 92 107 99; /* dim comments */
+
+  --grid-line: 255 255 255;
+  --grid-opacity: 0.015;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg: 244 243 237; /* #F4F3ED warm off-white */
+  --surface: 251 250 245; /* #FBFAF5 */
+  --surface-2: 237 236 227; /* #EDECE3 */
+  --border: 220 219 206; /* #DCDBCE */
+  --fg: 44 51 45; /* #2C332D */
+  --fg-strong: 16 20 15; /* #10140F */
+  --muted: 107 122 114; /* #6B7A72 */
+  --accent: 0 150 75; /* #00964B darkened for AA contrast on light */
+  --accent-dim: 0 122 61; /* #007A3D */
+
+  --syn-str: 152 104 1; /* darker amber */
+  --syn-key: 26 108 176; /* darker blue */
+  --syn-fn: 26 128 138; /* darker cyan */
+  --syn-num: 174 108 41;
+  --syn-comment: 140 150 138;
+
+  --grid-line: 0 0 0;
+  --grid-opacity: 0.02;
+  color-scheme: light;
+}
+
+@layer base {
+  * {
+    border-color: rgb(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem; /* offset for the sticky header */
+  }
+
+  body {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--fg));
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* subtle grid texture — the "terminal on a grid" backdrop */
+    background-image:
+      linear-gradient(
+        rgb(var(--grid-line) / var(--grid-opacity)) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        rgb(var(--grid-line) / var(--grid-opacity)) 1px,
+        transparent 1px
+      );
+    background-size: 42px 42px;
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent) / 0.25);
+    color: rgb(var(--fg-strong));
+  }
+
+  /* Accessible focus ring for keyboard users */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  h1, h2, h3, h4 {
+    color: rgb(var(--fg-strong));
+  }
+}
+
+@layer components {
+  /* the recurring "> command" prompt marker */
+  .prompt::before {
+    content: "$ ";
+    color: rgb(var(--accent));
+    font-family: var(--font-mono), monospace;
+  }
+
+  /* faint scanline overlay for authentic CRT feel on terminal panels */
+  .scanlines {
+    position: relative;
+  }
+  .scanlines::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgb(var(--fg) / 0.03) 0px,
+      rgb(var(--fg) / 0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: overlay;
+    border-radius: inherit;
+  }
+
+  .terminal-window {
+    background-color: rgb(var(--surface));
+    border: 1px solid rgb(var(--border));
+    border-radius: 10px;
+    box-shadow:
+      0 0 0 1px rgb(var(--accent) / 0.04),
+      0 24px 60px -30px rgb(0 0 0 / 0.6);
+  }
+}
+
+/* Respect users who prefer reduced motion — kill non-essential animation */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
