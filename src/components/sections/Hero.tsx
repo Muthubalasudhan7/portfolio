@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { profile, socials } from "@/lib/data";
+import { profile, resumeAvailable, socials } from "@/lib/data";
 import TerminalWindow from "@/components/ui/TerminalWindow";
 import Typewriter from "@/components/ui/Typewriter";
 
@@ -65,6 +65,18 @@ export default function Hero() {
             <span className="text-syn-str">{profile.company}</span>
           </motion.p>
 
+          {/* product-based signal, rendered as a shell comment */}
+          <motion.p
+            variants={line}
+            custom={3.5}
+            initial="hidden"
+            animate="show"
+            className="mt-1 text-syn-comment"
+          >
+            <span aria-hidden># </span>
+            {profile.productSignal}
+          </motion.p>
+
           {/* live role typewriter */}
           <motion.p
             variants={line}
@@ -99,12 +111,10 @@ export default function Hero() {
         className="mt-8 flex flex-wrap items-center gap-3 font-mono text-sm"
       >
         <a
-          href={socials.resume}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#ai"
           className="rounded-md bg-accent px-4 py-2.5 font-medium text-bg transition-transform hover:-translate-y-0.5"
         >
-          ./resume.pdf
+          cat ai-workflow.md ↓
         </a>
         <a
           href="#contact"
@@ -118,9 +128,19 @@ export default function Hero() {
           rel="noopener noreferrer"
           className="rounded-md border border-border bg-surface px-4 py-2.5 text-fg transition-colors hover:border-accent/60 hover:text-accent"
         >
-          {/* TODO: point socials.github at your real profile */}
           GitHub ↗
         </a>
+        {/* Résumé button appears only once a real PDF is added at public/resume.pdf. */}
+        {resumeAvailable && (
+          <a
+            href={socials.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-md border border-border bg-surface px-4 py-2.5 text-fg transition-colors hover:border-accent/60 hover:text-accent"
+          >
+            ./resume.pdf ↗
+          </a>
+        )}
       </motion.div>
     </section>
   );

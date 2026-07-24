@@ -17,7 +17,7 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
-const siteUrl = "https://muthu-portfolio.vercel.app"; // TODO: set to your deployed domain
+const siteUrl = "https://muthu-portfolio-one.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -28,9 +28,13 @@ export const metadata: Metadata = {
   description: profile.valueProp,
   keywords: [
     "Muthu Bala Sudhan",
+    "Product Engineer",
+    "AI-first Engineer",
+    "AI-native Developer",
     "Software Engineer",
     "Electron",
     "Cross-Platform Desktop",
+    "Security Engineer",
     "Angular",
     "Node.js",
     "Full-Stack Developer",

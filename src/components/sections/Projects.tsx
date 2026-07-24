@@ -1,9 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { projects, type Project } from "@/lib/data";
 import Section from "@/components/ui/Section";
 import Reveal from "@/components/ui/Reveal";
+import ProjectModal from "@/components/ui/ProjectModal";
 
 function LinkPill({
   href,
@@ -24,7 +26,15 @@ function LinkPill({
   );
 }
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectCard({
+  project,
+  index,
+  onOpenCaseStudy,
+}: {
+  project: Project;
+  index: number;
+  onOpenCaseStudy: (p: Project) => void;
+}) {
   const flagship = project.flagship;
 
   return (
@@ -62,7 +72,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
       <p className="mt-4 leading-relaxed text-fg">{project.description}</p>
 
-      {flagship && (
+      {project.highlights.length > 0 && (
         <ul className="mt-5 space-y-2.5">
           {project.highlights.map((h, i) => (
             <li key={i} className="flex gap-3 text-sm text-fg">
@@ -90,17 +100,26 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
       {/* links / status */}
       <div className="mt-6 flex flex-wrap items-center gap-2 pt-2">
+        {project.caseStudy && (
+          <button
+            type="button"
+            onClick={() => onOpenCaseStudy(project)}
+            className="rounded-md border border-accent/50 bg-accent/10 px-3 py-1.5 font-mono text-xs text-accent transition-colors hover:bg-accent/20"
+          >
+            view case study →
+          </button>
+        )}
         {project.links.demo ? (
           <LinkPill href={project.links.demo}>live demo ↗</LinkPill>
         ) : null}
         {project.links.repo ? (
           <LinkPill href={project.links.repo}>source ↗</LinkPill>
         ) : null}
-        {/* Proprietary / internal work: no public links */}
-        {!project.links.demo && !project.links.repo && (
+        {/* Private/proprietary work carries a truthful note instead of a dead link. */}
+        {!project.links.demo && !project.links.repo && project.links.note && (
           <span className="flex items-center gap-2 font-mono text-xs text-muted">
-            <span aria-hidden className="text-accent"></span>
-            {project.links.note ?? "Links coming soon"}
+            <span aria-hidden className="text-accent">◈</span>
+            {project.links.note}
           </span>
         )}
       </div>
@@ -109,6 +128,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 }
 
 export default function Projects() {
+  const [active, setActive] = useState<Project | null>(null);
+
   return (
     <Section id="projects" command="ls -la ./projects" title="Projects">
       <Reveal>
@@ -121,9 +142,20 @@ export default function Projects() {
       </Reveal>
       <div className="grid gap-5 md:grid-cols-2">
         {projects.map((project, i) => (
-          <ProjectCard key={project.name} project={project} index={i} />
+          <ProjectCard
+            key={project.name}
+            project={project}
+            index={i}
+            onOpenCaseStudy={setActive}
+          />
         ))}
       </div>
+
+      <AnimatePresence>
+        {active && (
+          <ProjectModal project={active} onClose={() => setActive(null)} />
+        )}
+      </AnimatePresence>
     </Section>
   );
 }

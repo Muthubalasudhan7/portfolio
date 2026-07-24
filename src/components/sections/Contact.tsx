@@ -134,8 +134,7 @@ export default function Contact() {
               )}
               {status === "idle" && !FORMSPREE_ENDPOINT && (
                 <span className="text-muted">
-                  {/* TODO: set FORMSPREE_ENDPOINT in lib/data.ts to enable
-                      in-page sending. Until then this opens your mail client. */}
+                  {/* With no FORMSPREE_ENDPOINT set, submissions open the mail client. */}
                   {"// opens your mail client"}
                 </span>
               )}
